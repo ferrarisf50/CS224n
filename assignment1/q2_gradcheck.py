@@ -5,6 +5,7 @@ import random
 
 
 # First implement a gradient checker by filling in the following functions
+#%%
 def gradcheck_naive(f, x):
     """ Gradient check for a function f.
 
@@ -30,7 +31,14 @@ def gradcheck_naive(f, x):
         # to test cost functions with built in randomness later.
 
         ### YOUR CODE HERE:
-        raise NotImplementedError
+        x[ix] += h
+        random.setstate(rndstate)
+        before,_ = f(x)
+        random.setstate(rndstate)
+        x[ix] -= 2*h
+        after,_ = f(x)
+        x[ix] += h
+        numgrad = (before - after) / (2*h)
         ### END YOUR CODE
 
         # Compare gradients
@@ -46,7 +54,7 @@ def gradcheck_naive(f, x):
 
     print ("Gradient check passed!")
 
-
+#%%
 def sanity_check():
     """
     Some basic sanity checks.
@@ -59,7 +67,7 @@ def sanity_check():
     gradcheck_naive(quad, np.random.randn(4,5))   # 2-D test
     print ("")
 
-
+#%%
 def your_sanity_checks():
     """
     Use this space add any additional sanity checks by running:
@@ -69,10 +77,10 @@ def your_sanity_checks():
     """
     print ("Running your sanity checks...")
     ### YOUR CODE HERE
-    raise NotImplementedError
+    #raise NotImplementedError
     ### END YOUR CODE
 
-
+#%%
 if __name__ == "__main__":
     sanity_check()
     your_sanity_checks()

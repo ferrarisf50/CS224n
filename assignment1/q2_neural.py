@@ -7,7 +7,7 @@ from q1_softmax import softmax
 from q2_sigmoid import sigmoid, sigmoid_grad
 from q2_gradcheck import gradcheck_naive
 
-
+#%%
 def forward_backward_prop(data, labels, params, dimensions):
     """
     Forward and backward propagation for a two-layer sigmoidal network
@@ -36,7 +36,12 @@ def forward_backward_prop(data, labels, params, dimensions):
     b2 = np.reshape(params[ofs:ofs + Dy], (1, Dy))
 
     ### YOUR CODE HERE: forward propagation
-    raise NotImplementedError
+    x1=np.dot(data,W1)+b1     #   M*H
+    h=sigmoid(x1)             #   M*H
+    x2=np.dot(h,W2)+b2        #   M*Dy
+    yhat=softmax(x2)          #   M*Dy
+    cost=-np.sum(np.log(yhat)*labels))
+    
     ### END YOUR CODE
 
     ### YOUR CODE HERE: backward propagation
@@ -55,7 +60,7 @@ def sanity_check():
     Set up fake data and parameters for the neural network, and test using
     gradcheck.
     """
-    print "Running sanity check..."
+    print ("Running sanity check...")
 
     N = 20
     dimensions = [10, 5, 10]
@@ -78,7 +83,7 @@ def your_sanity_checks():
     This function will not be called by the autograder, nor will
     your additional tests be graded.
     """
-    print "Running your sanity checks..."
+    print ("Running your sanity checks...")
     ### YOUR CODE HERE
     raise NotImplementedError
     ### END YOUR CODE
@@ -87,3 +92,10 @@ def your_sanity_checks():
 if __name__ == "__main__":
     sanity_check()
     your_sanity_checks()
+
+    
+#%%
+aaa=np.array([[1,2],[3,4]])
+aaa1=np.array([1,2])
+print(aaa+aaa1)
+print(np.dot(aaa,aaa1))
