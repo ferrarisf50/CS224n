@@ -36,18 +36,26 @@ def forward_backward_prop(data, labels, params, dimensions):
     b2 = np.reshape(params[ofs:ofs + Dy], (1, Dy))
 
     ### YOUR CODE HERE: forward propagation
-    x1=np.dot(data,W1)+b1     #   M*H
-    h=sigmoid(x1)             #   M*H
-    x2=np.dot(h,W2)+b2        #   M*Dy
-    yhat=softmax(x2)          #   M*Dy
-    cost=-np.sum(np.log(yhat)*labels))
+    x1=np.dot(data,W1)+b1     #   (M,Dx).(Dx,H)+(1,H)=(M,H)
+    h=sigmoid(x1)             #   (M,H)
+    x2=np.dot(h,W2)+b2        #   (M,H).(H,Dy)+(1,Dy)=(M,Dy)
+    yhat=softmax(x2)          #   (M,Dy)
+    cost=-np.sum(np.log(yhat)*labels)          #  (M,Dy)*(M*Dy)=(M*Dy) sum in all scalar
     
     ### END YOUR CODE
 
     ### YOUR CODE HERE: backward propagation
-    raise NotImplementedError
+    
     ### END YOUR CODE
-
+    d1=yhat-labels       # (M,Dy)-(M,Dy)=(M,Dy)
+    gradb2=np.sum(d1,axis=0)      # sum all row (M,Dy)->(1,Dy)
+    gradW2=np.dot(h.T,d1)    # (H,M).(M,Dy)=(H,Dy)
+    
+    d2=np.dot(d1,W2.T)*sigmoid_grad(h)   # (M,Dy).(Dy,H)*(M,H)=(M,H)
+    
+    gradb1=np.sum(d2,axis=0)      # (1,H)
+    gradW1=np.dot(data.T,d2)        # (Dx,M).(M,H)=(Dx,H)
+    
     ### Stack gradients (do not modify)
     grad = np.concatenate((gradW1.flatten(), gradb1.flatten(),
         gradW2.flatten(), gradb2.flatten()))
@@ -66,7 +74,7 @@ def sanity_check():
     dimensions = [10, 5, 10]
     data = np.random.randn(N, dimensions[0])   # each row will be a datum
     labels = np.zeros((N, dimensions[2]))
-    for i in xrange(N):
+    for i in range(N):
         labels[i, random.randint(0,dimensions[2]-1)] = 1
 
     params = np.random.randn((dimensions[0] + 1) * dimensions[1] + (
@@ -85,7 +93,7 @@ def your_sanity_checks():
     """
     print ("Running your sanity checks...")
     ### YOUR CODE HERE
-    raise NotImplementedError
+    #raise NotImplementedError
     ### END YOUR CODE
 
 
@@ -99,3 +107,5 @@ aaa=np.array([[1,2],[3,4]])
 aaa1=np.array([1,2])
 print(aaa+aaa1)
 print(np.dot(aaa,aaa1))
+print(np.mean(aaa))
+print(np.sum(aaa,axis=0))
