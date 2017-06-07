@@ -40,7 +40,7 @@ def forward_backward_prop(data, labels, params, dimensions):
     h=sigmoid(x1)             #   (M,H)
     x2=np.dot(h,W2)+b2        #   (M,H).(H,Dy)+(1,Dy)=(M,Dy)
     yhat=softmax(x2)          #   (M,Dy)
-    cost=-np.sum(np.log(yhat)*labels)          #  (M,Dy)*(M*Dy)=(M*Dy) sum in all scalar
+    cost=-np.mean(np.sum(np.log(yhat)*labels))          #  (M,Dy)*(M*Dy)=(M*Dy) sum in all scalar
     
     ### END YOUR CODE
 
